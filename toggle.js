@@ -1,20 +1,24 @@
 const testStartLinePattern = /^\s+it/
-const { writeFile } = require('fs').promises
+const vscode = require('vscode')
 
-module.exports = async (textEditor, edit) => {
+module.exports = async (textEditor) => {
   const { line: cursorLineNum } = textEditor._selections[0].active
-  const { fileName } = textEditor._documentData._document
   const lines = textEditor._documentData._lines
   const testStartLine = lines.slice(0, cursorLineNum).reverse().find(line => line.match(testStartLinePattern))
   const testStartLineNum = lines.indexOf(testStartLine)
 
-  const updatedFile = lines
-    .map((line, i) => {
-      if (i !== testStartLineNum) return line
-      if (line.match(/^\s+it\(/)) return line.replace('it(', 'it.only(')
-      else return line.replace('it.only(', 'it(')
-    })
-    .join('\n')
+  const start = new vscode.Position(testStartLineNum, 0)
+  const end = new vscode.Position(testStartLineNum, testStartLine.length)
+  const range = new vscode.Range(start, end)
 
-  writeFile(fileName, updatedFile)
+  let updatedLine
+  if (testStartLine.match(/^\s+it\(/)) {
+    updatedLine = testStartLine.replace('it(', 'it.only(')
+  } else {
+    updatedLine = testStartLine.replace('it.only(', 'it(')
+  }
+
+  vscode.window.activeTextEditor.edit(editBuilder => {
+    editBuilder.replace(range, updatedLine)
+  })
 }
