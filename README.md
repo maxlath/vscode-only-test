@@ -1,6 +1,6 @@
 # vscode-only-test
 
-A vscode/[codium](https://vscodium.com/) extension that adds a command to toggle [Mocha](https://mochajs.org) `it.only` to the test the cursor is in.
+A VSCode/[VSCodium](https://vscodium.com) extension to that adds a command to toggle [Mocha](https://mochajs.org) `it.only` to the test the cursor is in.
 
 
 ## Install
