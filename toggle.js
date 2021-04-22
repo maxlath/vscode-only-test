@@ -1,9 +1,10 @@
 const testStartLinePattern = /^\s+it/
 const vscode = require('vscode')
 
-module.exports = async (textEditor) => {
-  const { line: cursorLineNum } = textEditor._selections[0].active
-  const lines = textEditor._documentData._lines
+module.exports = async textEditor => {
+  const { line: cursorLineNum } = textEditor.selections[0].active
+  const text = textEditor.document.getText()
+  const lines = text.split('\n')
   const testStartLine = lines.slice(0, cursorLineNum + 1).reverse().find(line => line.match(testStartLinePattern))
   const testStartLineNum = lines.indexOf(testStartLine)
 

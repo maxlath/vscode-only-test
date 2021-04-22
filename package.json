@@ -13,12 +13,11 @@
     "*"
   ],
   "license": "MIT",
-  "dependencies": {
-    "vscode": "^1.1.37"
-  },
   "engines": {
     "vscode": "^1.18.0"
   },
-  "devDependencies": {},
-  "description": "Command to toggle Mocha it.only"
+  "description": "Command to toggle Mocha it.only",
+  "dependencies": {
+    "@types/vscode": "^1.55.0"
+  }
 }
