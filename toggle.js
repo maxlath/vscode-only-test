@@ -1,12 +1,20 @@
 const testStartLinePattern = /^\s+it/
 const vscode = require('vscode')
+const nonNull = value => value != null
 
 module.exports = async textEditor => {
   const { line: cursorLineNum } = textEditor.selections[0].active
   const text = textEditor.document.getText()
   const lines = text.split('\n')
   const testStartLine = lines.slice(0, cursorLineNum + 1).reverse().find(line => line.match(testStartLinePattern))
-  const testStartLineNum = lines.indexOf(testStartLine)
+
+  // Get the index of the closest matching line
+  const testStartLineNum = lines
+    .map((line, index) => {
+      if (line === testStartLine && index <= cursorLineNum) return index
+    })
+    .filter(nonNull)
+    .slice(-1)[0]
 
   if (testStartLineNum < 0) {
     console.warn('test line not found')
